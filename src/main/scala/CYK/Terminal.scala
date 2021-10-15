@@ -1,5 +1,3 @@
 package CYK
-
-class Terminal(name: String){
-  var n = name
-}
+//Class of terminal symbols
+class Terminal(name: String)

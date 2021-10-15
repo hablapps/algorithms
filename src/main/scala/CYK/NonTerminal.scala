@@ -1,5 +1,3 @@
 package CYK
-
-class NonTerminal(name: String){
-  var n = name
-}
+//Class of NonTerminal symbols
+class NonTerminal(name: String)
