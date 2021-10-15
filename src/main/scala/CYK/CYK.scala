@@ -1,7 +1,6 @@
 package CYK
 object CYK {
   def main(args: Array[String]): Unit = {
-
     //Definition of all non terminal symbols
     val S = new NonTerminal("S")
     val A = new NonTerminal("A")

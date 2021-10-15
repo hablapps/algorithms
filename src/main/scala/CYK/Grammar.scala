@@ -1,10 +1,8 @@
 package CYK
 
 class Grammar(N: Set[NonTerminal], T:Set[Terminal], S: NonTerminal, P:List[Production]){
-  var n = N
-  var t = T
-  var s = S
-  var p = P
+  private val s: NonTerminal = S
+  private val p: List[Production] = P
 
   //Implementation of CYK, it receives a word (Array of terminal elements) and check if it´s contained in the grammar
   def CYK(x: Array[Terminal]): Boolean={
