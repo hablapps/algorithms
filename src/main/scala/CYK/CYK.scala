@@ -1,39 +1,45 @@
 package CYK
+import Grammar.UnitProduction
+import Grammar.SymbolProduction
+
 object CYK {
   def main(args: Array[String]): Unit = {
-    //Definition of all non terminal symbols
-    val S = new NonTerminal("S")
-    val A = new NonTerminal("A")
-    val B = new NonTerminal("B")
-    val C = new NonTerminal("C")
-    val D = new NonTerminal("D")
-    val E = new NonTerminal("E")
-    val N = Set(S, A, B, C, D, E)
+    object N extends Enumeration {
+      type Symbol = Value
+      val S = Value("S")
+      val A = Value("A")
+      val B = Value("B")
+      val C = Value("C")
+      val D = Value("D")
+      val E = Value("E")
+    }
 
-    //Definition of all terminal symbols
-    val lpar = new Terminal("(")
-    val rpar = new Terminal(")")
-    val sum = new Terminal("+")
-    val min = new Terminal("-")
-    val mul = new Terminal("*")
-    val div = new Terminal("/")
-    val x = new Terminal("x")
-    val y = new Terminal("y")
-    val z = new Terminal("z")
-    val T = Set(lpar, rpar, sum, min, mul, div, x, y, z)
+    object T extends Enumeration {
+      type Symbol = Value
+      val lpar = Value("(")
+      val rpar = Value(")")
+      val sum = Value("+")
+      val min = Value("-")
+      val mul= Value("*")
+      val div= Value("/")
+      val x= Value("x")
+      val y= Value("y")
+      val z= Value("z")
+    }
 
     //Definition of all the production rules
-    val P = List(UnitProduction(S, x), UnitProduction(S, y), UnitProduction(S, z), SymbolProduction(S, A, S), SymbolProduction(S, C, D),
-      SymbolProduction(A, S, B), UnitProduction(B, sum), UnitProduction(B, min), UnitProduction(B, mul), UnitProduction(B, div), UnitProduction(C, lpar),
-      SymbolProduction(D, S, E), UnitProduction(E, rpar))
+    val P = List(UnitProduction(N.S, T.x), UnitProduction(N.S, T.y), UnitProduction(N.S, T.z), SymbolProduction(N.S, N.A, N.S),
+      SymbolProduction(N.S, N.C, N.D), SymbolProduction(N.A, N.S, N.B), UnitProduction(N.B, T.sum), UnitProduction(N.B, T.min),
+      UnitProduction(N.B, T.mul), UnitProduction(N.B, T.div), UnitProduction(N.C, T.lpar), SymbolProduction(N.D, N.S, N.E),
+      UnitProduction(N.E, T.rpar))
 
     //Creation of the grammar
-    val grammar = new Grammar(N, T, S, P)
+    val grammar = new Grammar(N, T, N.S, P)
 
-    val x1 = Array(lpar, x, sum, y, rpar, mul, z, div, x, min, y, min, z) //(x+y)*z/x-y-z
+    val x1 = List(T.lpar, T.x, T.sum, T.y, T.rpar, T.mul, T.z, T.div, T.x, T.min, T.y, T.min, T.z) //(x+y)*z/x-y-z
     println(grammar.CYK(x1))
 
-    val x2 = Array(x, y, sum, z) //xy+z
+    val x2 = List(T.x, T.y, T.sum, T.z) //xy+z
     println(grammar.CYK(x2))
 
   }
