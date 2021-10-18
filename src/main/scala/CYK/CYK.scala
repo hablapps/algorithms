@@ -27,6 +27,7 @@ object CYK {
       val z= Value("z")
     }
 
+
     //Definition of all the production rules
     val P = List(UnitProduction(N.S, T.x), UnitProduction(N.S, T.y), UnitProduction(N.S, T.z), SymbolProduction(N.S, N.A, N.S),
       SymbolProduction(N.S, N.C, N.D), SymbolProduction(N.A, N.S, N.B), UnitProduction(N.B, T.sum), UnitProduction(N.B, T.min),
@@ -34,13 +35,15 @@ object CYK {
       UnitProduction(N.E, T.rpar))
 
     //Creation of the grammar
-    val grammar = new Grammar(N, T, N.S, P)
+    val grammar = new Grammar(N, T, "S", P)
 
-    val x1 = List(T.lpar, T.x, T.sum, T.y, T.rpar, T.mul, T.z, T.div, T.x, T.min, T.y, T.min, T.z) //(x+y)*z/x-y-z
+    val x1 = "(x+y)*z/x-y-z"
     println(grammar.CYK(x1))
 
-    val x2 = List(T.x, T.y, T.sum, T.z) //xy+z
+    val x2 = "xy+z"
     println(grammar.CYK(x2))
 
+    val x3 = "aswe"
+    println(grammar.CYK(x3))
   }
 }
