@@ -1,49 +1,57 @@
 package CYK
-import Grammar.UnitProduction
-import Grammar.SymbolProduction
+
+import Grammar.{SymbolProduction, UnitProduction}
 
 object CYK {
+
+  implicit object N extends Enumeration {
+    type N = Value
+    val S, A, B, C, D, E = Value
+  }
+
+  implicit object T extends Enumeration {
+    type T = Value
+    val l, r, p, m, M,d, x, y, z = Value //for conversion l=(, r=), p=+, M=*, d=/
+  }
+
+  import N._, T._
+
+  implicitly[Enumeration{ type Value = T }]
+  implicitly[Enumeration{ type Value = N }]
+
+  type Word[S] = List[S]
+
+  implicit def convertStrToEnum[S](s: String)(
+    implicit E: Enumeration{ type Value = S }): Word[S] = {
+    try {
+      s.map((c: Char) =>
+        E.withName(c.toString).asInstanceOf[S]
+      ).toList
+    }
+    catch {
+      case _ : NoSuchElementException => throw new Exception("It´s not possible to transform the word to the alphabet")
+    }
+  }
+
+  val P = List(UnitProduction(S, x), UnitProduction(S, y), UnitProduction(S, z), SymbolProduction(S, A, S),
+    SymbolProduction(S, C, D), SymbolProduction(A, S, B), UnitProduction(B, p), UnitProduction(B, m),
+    UnitProduction(B, M), UnitProduction(B, d), UnitProduction(C, l), SymbolProduction(D, S, E),
+    UnitProduction(E, r))
+
+  val grammar = new Grammar[N, T](S, P)
+
   def main(args: Array[String]): Unit = {
-    object N extends Enumeration {
-      type Symbol = Value
-      val S = Value("S")
-      val A = Value("A")
-      val B = Value("B")
-      val C = Value("C")
-      val D = Value("D")
-      val E = Value("E")
-    }
+    implicitly[Enumeration{ type Value = T }]
 
-    object T extends Enumeration {
-      type Symbol = Value
-      val lpar = Value("(")
-      val rpar = Value(")")
-      val sum = Value("+")
-      val min = Value("-")
-      val mul= Value("*")
-      val div= Value("/")
-      val x= Value("x")
-      val y= Value("y")
-      val z= Value("z")
-    }
+    println(grammar.CYK(convertStrToEnum("z")))
 
+    //(x+y)*z/x-y-z)
+    println(grammar.CYK(convertStrToEnum("lxpyrMzdxmymz")))
 
-    //Definition of all the production rules
-    val P = List(UnitProduction(N.S, T.x), UnitProduction(N.S, T.y), UnitProduction(N.S, T.z), SymbolProduction(N.S, N.A, N.S),
-      SymbolProduction(N.S, N.C, N.D), SymbolProduction(N.A, N.S, N.B), UnitProduction(N.B, T.sum), UnitProduction(N.B, T.min),
-      UnitProduction(N.B, T.mul), UnitProduction(N.B, T.div), UnitProduction(N.C, T.lpar), SymbolProduction(N.D, N.S, N.E),
-      UnitProduction(N.E, T.rpar))
+    //xy+z
+    println(grammar.CYK(convertStrToEnum("xypz")))
 
-    //Creation of the grammar
-    val grammar = new Grammar(N, T, "S", P)
-
-    val x1 = "(x+y)*z/x-y-z"
-    println(grammar.CYK(x1))
-
-    val x2 = "xy+z"
-    println(grammar.CYK(x2))
-
-    val x3 = "aswe"
-    println(grammar.CYK(x3))
+    //aswe
+    println(grammar.CYK(convertStrToEnum("aswe")))
   }
 }
