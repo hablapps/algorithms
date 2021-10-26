@@ -1,29 +1,16 @@
 package DivideAndConquer
 
 import scala.runtime.ScalaRunTime.stringOf
+import DaC._
+object MergeSort{
+  def decompose(array: Array[Int]): Either[Array[Int], List[Array[Int]]]=
+    if (array.length<=1) Left(array)
+    else Right(List(array.slice(0, array.length/2), array.slice(array.length/2, array.length)))
 
-class MergeSort(array: Array[Int]) extends Problem[Array[Int]]{
-
-  override def resolve(): Either[Array[Int], Error] = {
-    if(baseCase()){
-      Left(array)
-    }
-    else {
-      Right(new Error("Error while ordering"))
-    }
-  }
-
-  override def baseCase(): Boolean = array.length <= 1
-
-  override def subProblem(): List[MergeSort] = {
-    val m = array.length/2
-    List(new MergeSort(array.slice(0, m)) ,new MergeSort(array.slice(m, array.size)))
-  }
-
-  override def merge(list: List[Array[Int]]): Array[Int] =
+  def merge(problem: Array[Int], list: List[Array[Int]]): Array[Int] =
     list match {
       case a1:: a2:: _ =>
-        val out = new Array[Int](array.size)
+        val out = new Array[Int](problem.size)
         var i =0
         var j=0
         while (i<a1.size && j<a2.size){
@@ -47,11 +34,10 @@ class MergeSort(array: Array[Int]) extends Problem[Array[Int]]{
         out
       case _ => new Array[Int](0)
     }
-}
-object MergeSort{
+
   def main(args: Array[String]): Unit = {
-    val unordered = Array(23, 43, 15, 32, 3, 41, 2)
-    val ordered = Problem.DyC(new MergeSort(unordered))
+    val unordered = Array(23, 43, 15, 32, 3, 41, 2, 2)
+    val ordered = DaC(unordered, decompose, merge)
     println(stringOf(ordered))
   }
 }
