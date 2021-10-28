@@ -1,7 +1,4 @@
 package DivideAndConquer
-
-import scala.runtime.ScalaRunTime.stringOf
-import DaC._
 object MergeSort{
 
   def decompose(array: Array[Int]): Either[Array[Int], List[Array[Int]]]=
@@ -15,6 +12,7 @@ object MergeSort{
   def decompose2(list: List[Int]): Either[List[Int], (List[Int], List[Int])]=
     if (list.length <= 1) Left(list)
     else Right((list.slice(0, list.length/2), list.slice(list.length/2, list.length)))
+
 
   def merge(problem: Array[Int], list: List[Array[Int]]): Array[Int] =
     list match {
@@ -68,25 +66,20 @@ object MergeSort{
     }
     out
   }
-  def composeRec(a1: List[Int], a2: List[Int]): List[Int] =
-    a1 match {
-      case Nil => a2
-      case head :: tail =>
-        a2 match {
-          case Nil => a1
-          case head2:: _ if head<=head2 => head :: composeRec(tail, a2)
-          case head2:: tail2 => head2 :: composeRec(a1, tail2)
-        }
+  def composeRec1(a1: List[Int], a2: List[Int]): List[Int] =
+    (a1, a2) match {
+      case (Nil, _) => a2
+      case (_, Nil) => a1
+      case (head1:: tail, head2:: _) if(head1<=head2) => head1 :: composeRec1(tail, a2)
+      case (_, head:: tail) => head :: composeRec1(a1, tail)
     }
 
-  def main(args: Array[String]): Unit = {
-    val unordered = Array(23, 43, 15, 32, 3, 41, 2, 2)
-    val ordered = DaC(unordered, decompose, merge)
-    val ordered1 = DaC2(unordered, decompose1,  compose)
-    val ordered2 = DaC2(unordered.toList, decompose2, composeRec)
-    println(stringOf(ordered))
-    println(stringOf(ordered1))
-    println(stringOf(ordered2))
-  }
+  def apply (vector: Array[Int]): Array[Int] =
+    decompose1(vector) match {
+      case Left(s) => s
+      case Right((a1, a2)) =>
+        compose(apply(a1), apply(a2))
+    }
+
 }
 

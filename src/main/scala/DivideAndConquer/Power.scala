@@ -1,6 +1,4 @@
 package DivideAndConquer
-
-import DaC._
 object Power{
   def decompose(problem: (Int, Int)): Either[Int, List[(Int, Int)]]=
     problem match {
@@ -27,10 +25,4 @@ object Power{
       case (_, y) if y%2 == 0 => sol * sol
       case (x, _) => x*sol*sol
     }
-
-
-  def main(args: Array[String]): Unit = {
-    println(DaC((3,3), decompose, merge))
-    println(DaC3((4,2), decompose1, compose))
-  }
 }
