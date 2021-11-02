@@ -1,13 +1,18 @@
 package DivideAndConquer
-object Power extends ProblemDaC [(Int, Int)]{
-  type S = Int
-  def decompose(problem: (Int, Int)): Either[Int, ((Int, Int), (Int, Int))]=
+object Power{
+  def decompose(problem: (Int, Int)): Either[Int, (Int, Int)]=
     problem match {
       case (_,y) if y==0 => Left(1)
-      case (x,y) if y==1 => Left(x)
-      case (x,y) if y%2 ==0 => Right((x, y/2),(x, y/2))
-      case (x,y) => Right((x*x, y/2), (x, y/2))
+      case (x,y) => Right(x, y/2)
     }
-  def compose(s1: Int, s2: Int): Int =
-    s1*s2
+  def compose(problem : (Int, Int), s: Int): Int =
+    problem match {
+      case (_, y) if y%2==0 => s*s
+      case (x, _) => x*s*s
+    }
+  def apply(problem: (Int, Int)): Int =
+    decompose(problem) match {
+      case Left(s) => s
+      case Right(p) => compose(problem, apply(p))
+    }
 }
