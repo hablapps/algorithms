@@ -35,7 +35,7 @@ object CYK {
 
   val P = List(UnitProduction(S, x), UnitProduction(S, y), UnitProduction(S, z), SymbolProduction(S, A, S),
     SymbolProduction(S, C, D), SymbolProduction(A, S, B), UnitProduction(B, p), UnitProduction(B, m),
-    UnitProduction(B, M), UnitProduction(B, d), UnitProduction(C, l), SymbolProduction(D, S, E),
+    UnitProduction(B,M), UnitProduction(B, d), UnitProduction(C, l), SymbolProduction(D, S, E),
     UnitProduction(E, r))
 
   val grammar = new Grammar[N, T](S, P)
@@ -46,7 +46,7 @@ object CYK {
     println(grammar.CYK(convertStrToEnum("z")))
 
     //(x+y)*z/x-y-z)
-    println(grammar.CYK(convertStrToEnum("lxpyrMzdxmymz")))
+    println(grammar.CYK(convertStrToEnum("lxpy0Mzdxmymz")))
 
     //xy+z
     println(grammar.CYK(convertStrToEnum("xypz")))
