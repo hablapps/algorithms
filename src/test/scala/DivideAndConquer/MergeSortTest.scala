@@ -3,7 +3,7 @@ package DivideAndConquer
 import DivideAndConquer.MergeSort._
 import org.scalatest._
 
-class MergeSortTest(sort: Array[Int] => Array[Int]) extends FunSuite {
+class MergeSortTest extends FunSuite {
   val unordered0 = Array(23, 43, 15, 32, 3, 41, 2, 2)
   val ordered0 = Array(2, 2, 3, 15, 23, 32, 41, 43)
 
@@ -20,16 +20,10 @@ class MergeSortTest(sort: Array[Int] => Array[Int]) extends FunSuite {
   val ordered4 = new Array[Int](0)
 
   test("MergeSort") {
-    assert(sort(unordered0) === ordered0)
-    assert(sort(unordered1) === ordered1)
-    assert(sort(unordered2) === ordered2)
-    assert(sort(unordered3) === ordered3)
-    assert(sort(unordered4) === ordered4)
-  }
-}
-object MergeSortTest{
-  def main(args: Array[String]): Unit = {
-    run(new MergeSortTest(apply))
-    run(new MergeSortTest(adHoc))
+    assert(apply(unordered0) === ordered0)
+    assert(apply(unordered1) === ordered1)
+    assert(apply(unordered2) === ordered2)
+    assert(apply(unordered3) === ordered3)
+    assert(apply(unordered4) === ordered4)
   }
 }

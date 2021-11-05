@@ -2,11 +2,13 @@ package DivideAndConquer
 
 object MergeSort extends ProblemDaC [Array[Int]]{
   type S = Array[Int]
+  type F[x] = (x, x)
   def decompose(array: Array[Int]): Either[Array[Int], (Array[Int], Array[Int])]=
     if (array.length<=1) Left(array)
     else Right((array.slice(0, array.length/2), array.slice(array.length/2, array.length)))
 
-  def compose(a1: Array[Int], a2: Array[Int]): Array[Int]={
+  def compose(a: (Array[Int], Array[Int])): Array[Int]={
+    val (a1, a2) = a
     val out = new Array[Int](a1.length+a2.length)
     var i =0
     var j=0
@@ -30,12 +32,6 @@ object MergeSort extends ProblemDaC [Array[Int]]{
     }
     out
   }
-  def adHoc(array:Array[Int]): Array[Int] =
-    decompose(array) match {
-      case Left(s)=> s
-      case Right((p1, p2))=>
-        compose(adHoc(p1), adHoc(p2))
-    }
 
 }
 

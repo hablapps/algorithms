@@ -1,17 +1,18 @@
 package DivideAndConquer
+import cats.Functor
+import cats.syntax.all._
 
-
-trait ProblemDaC[T] {
+trait ProblemDaC[T]{
   type S
+  type F[_]
 
-  def decompose(problem: T): Either[S, (T, T)]
+  def decompose(problem: T): Either[S, F[T]]
+  def compose(solution: F[S]): S
 
-  def compose(solution1: S, solution2: S): S
-
-  def apply(problem: T): S =
+  def apply(problem: T)(implicit F: Functor[F]): S =
     decompose(problem)match {
       case Left(s) => s
-      case Right((p1, p2))=>
-        compose(apply(p1), apply(p2))
+      case Right(p)=>
+        compose(p.map(apply))
     }
 }
